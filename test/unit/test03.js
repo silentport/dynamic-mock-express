@@ -10,19 +10,19 @@ app.use(
   })
 );
 
-app.listen(3003, function() {
+app.listen(3003, function () {
   console.log("Example app listening on port 3003!");
 });
 
-describe("mot match prefix", function() {
-  describe("GET:api/a/b", function() {
-    it("should return 404", function(done) {
+describe("not match prefix", function () {
+  describe("GET:api/a/b", function () {
+    it("should return 404", function (done) {
       request(app)
         .get("/api/a/b")
         .expect(404, {
-  
+
         }, done);
     });
   });
- 
+
 });

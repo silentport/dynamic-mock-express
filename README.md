@@ -2,9 +2,18 @@
 ### A middleWare based on express to handle http request when real server is unfinished
 [![Coveralls](https://img.shields.io/coveralls/xcatliu/pagic.svg)](https://coveralls.io/github/xcatliu/pagic)
 
+### feature
+
+1.Suport Restful API friendly
+2.Flexible configuration to support custom filtering URL
+3.Could accept pathParams, query, body in different request methods.
+4.No cache, config‘s change does not need to be restarted.
+
+
 
 ### usage
 
+`mock/index.js`
 ```javascript
 module.exports = {
   needMock: true,
@@ -37,3 +46,30 @@ module.exports = {
 };
 
 ```
+### include
+```javascript
+// express server
+const app = express();
+app.use(
+  mock({
+    mockDir: path.resolve(__dirname, "../mock")
+  })
+);
+
+
+// webpack-dev-server, such as vue-cli or create-react-app
+
+new WebpackDevServer(compiler, {
+  ...
+  setup: (app) => {
+    app.use(
+        mock({
+          mockDir: path.resolve(__dirname, "../mock"),
+        })
+    );
+  }
+})
+```
+
+### api
+
