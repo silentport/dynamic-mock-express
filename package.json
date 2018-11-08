@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "cover": "istanbul cover node_modules/mocha/bin/_mocha test/unit/*.js",
+    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "test": "mocha test/unit/*.js"
   },
   "repository": {
@@ -23,6 +24,7 @@
   },
   "homepage": "https://github.com/silentport/dynamic-mock-express#readme",
   "devDependencies": {
+    "coveralls": "^3.0.2",
     "express": "^4.16.4",
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
