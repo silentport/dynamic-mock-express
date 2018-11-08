@@ -1,0 +1,32 @@
+{
+  "name": "dynamic-mock-express",
+  "version": "1.0.0",
+  "description": "A dynamic mock tools to response http request",
+  "main": "index.js",
+  "scripts": {
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha test/unit/*.js",
+    "test": "mocha test/unit/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silentport/dynamic-mock-express.git"
+  },
+  "keywords": [
+    "mock",
+    "mock-express",
+    "mock-dynamic"
+  ],
+  "author": "liyonglong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/silentport/dynamic-mock-express/issues"
+  },
+  "homepage": "https://github.com/silentport/dynamic-mock-express#readme",
+  "devDependencies": {
+    "express": "^4.16.4",
+    "istanbul": "^0.4.5",
+    "mocha": "^5.2.0",
+    "query-string": "^6.2.0",
+    "supertest": "^3.3.0"
+  }
+}
