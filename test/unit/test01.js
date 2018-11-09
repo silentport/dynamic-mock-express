@@ -144,4 +144,30 @@ describe("allow mock", function() {
         }, done);
     });
   });
+
+  describe("DELETE:a/b/c", function() {
+    it("should execute custom function as response", function(done) {
+      request(app)
+        .delete("/api/a/b/c/108")
+        .expect(200, {
+          a: 1,
+          b: 6,
+          c: {
+            d: 7,
+            e: 88
+          },
+          f: [
+            1,
+            6,
+            {
+                b: 5,
+                c: {
+                    d: "108"
+                }
+            }
+          ]
+        }, done);
+    });
+  });
+  
 });

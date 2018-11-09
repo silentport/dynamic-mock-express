@@ -29,6 +29,32 @@ module.exports = {
       return {
         id: data.params.id
       };
+    },
+    "DELETE:a/b/c/:id": {
+      a: 1,
+      b: () => {
+        return 2 * 3;
+      },
+      c: {
+        d: 7,
+        e: () => {
+          return 88 ;
+        }
+      },
+      f: [
+        1,
+        () => {
+          return 6;
+        },
+        {
+            b: 5,
+            c: {
+                d: (data) => {
+                    return data.params.id;
+                }
+            }
+        }
+      ]
     }
   }
 };

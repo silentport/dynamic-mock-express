@@ -99,6 +99,9 @@ module.exports = function (config) {
                 } else {
                     resData = value || {};
                 }
+        
+                // 深度遍历value，存在值为函数的key则将函数替换为函数的执行结果
+                resData = travel(resData, {query: query, params: params, body: data});
 
                 res.writeHead(200, {"Content-Type": "application/json; charset=UTF-8"});
                 res.write(JSON.stringify(resData));
@@ -109,6 +112,40 @@ module.exports = function (config) {
             }
         });
 
+        function getType(any) {
+            return Object.prototype.toString.call(any);
+        }
+
+        function isArray(any) {
+            return getType(any) === "[object Array]";
+        }
+
+        function isFunc(any) {
+            return getType(any) === "[object Function]";
+        }
+
+        function isObject(any) {
+            return getType(any) === "[object Object]";
+        }
+
+        function travel(data, args) {
+            if (isObject(data)) {
+              Object.keys(data).forEach(function(key) {
+                  data[key] = travel(data[key], args);
+              })
+            }
+          
+            if (isFunc(data)) {
+              data = travel(data(args), args);
+            }
+          
+            if (isArray(data)) {
+              for (var i = 0; i < data.length; i++) {
+                data[i] = travel(data[i], args);
+              }
+            } 
+            return data;
+        }
 
         function getFormData(str) {
             var regForm = /name="(\w+)"(\r\n|\n)+(\w+)/g;

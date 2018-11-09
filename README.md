@@ -7,7 +7,8 @@
 >1.Suport Restful API friendly               
 >2.Flexible configuration to support custom filtering URL                   
 >3.Could accept pathParams, query, body in different request methods.          
->4.No cache, config‘s change does not need to be restarted.             
+>4.No cache, config‘s change does not need to be restarted                     
+>5.Support function nesting.               
 
 ### include
 
@@ -75,6 +76,14 @@ module.exports = {
       return {
         id: data.params.id
       };
+    },
+    "DELETE:a/b/c:id":  {
+       a: {
+         b: 1,
+         c: (data) => {
+           id: data.params.id
+         }
+       }
     }
   }
 };
