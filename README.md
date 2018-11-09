@@ -47,7 +47,9 @@ module.exports = {
   needMock: true,
   prefix: "api",
   tip: true,
-  ignore: url => {// could filter some request url by return true}
+  ignore: url => {// could filter some request url by return true
+  
+  }
   routes: {
     "GET:a/b": require("./mock_1"),
     "GET:a/b/:id": (data) =>{ // suport return a dynamic json

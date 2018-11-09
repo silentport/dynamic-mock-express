@@ -1,6 +1,6 @@
 {
   "name": "dynamic-mock-express",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A dynamic mock tools to response http request",
   "main": "index.js",
   "scripts": {
