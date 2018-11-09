@@ -53,7 +53,7 @@ module.exports = {
   }
   routes: {
     "GET:a/b": require("./mock_1"),
-    "GET:a/b/:id": (data) =>{ // suport return a dynamic json
+    "GET:a/b/:id": (data) => { // suport return a dynamic json
       return {
         data: "mock_2",
         params: data.params,
@@ -72,12 +72,12 @@ module.exports = {
         body: data.body
       };
     },
-    "DELETE:a/b/:id": function(data) {
+    "DELETE:a/b/:id": (data) => {
       return {
         id: data.params.id
       };
     },
-    "DELETE:a/b/c:id":  {
+    "DELETE:a/b/c/:id":  { // support function nesting.
        a: {
          b: 1,
          c: (data) => {
