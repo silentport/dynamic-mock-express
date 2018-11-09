@@ -5,7 +5,14 @@ module.exports = {
   ignore: url => {},
   routes: {
     "GET:a/b": require("./mock_1"),
-    "GET:a/b/:id": require("./mock_2"),
+    "GET:a/b/:id": (data) =>{
+      return {
+        data: "mock_2",
+        params: data.params,
+        query: data.query,
+        body: data.body
+      };
+    },
     "GET:b/:id/:code": require("./mock_3"),
     "POST:a/b": require("./mock_4"),
     "POST:b/c/:id/:code/:region": require("./mock_5"),

@@ -4,15 +4,44 @@
 
 ### feature
 
-1.Suport Restful API friendly
-2.Flexible configuration to support custom filtering URL
-3.Could accept pathParams, query, body in different request methods.
-4.No cache, config‘s change does not need to be restarted.
+>1.Suport Restful API friendly               
+>2.Flexible configuration to support custom filtering URL                   
+>3.Could accept pathParams, query, body in different request methods.          
+>4.No cache, config‘s change does not need to be restarted.             
 
+### include
 
+```javascript
+npm i dynamic-mock-express -S
 
+```
+#### express server
+```javascript
+const app = express();
+const mock = require("dynamic-mock-express");
+app.use(
+  mock({
+    mockDir: path.resolve(__dirname, "../mock")
+  })
+);
+```
+#### webpack-dev-server, such as vue-cli or create-react-app
+```javascript
+const mock = require("dynamic-mock-express");
+const mock = require("dynamic-mock-express");
+new WebpackDevServer(compiler, {
+  ...
+  setup: (app) => {
+    app.use(
+        mock({
+          mockDir: path.resolve(__dirname, "../mock"),
+          entry: "index.js" // default is index.js
+        })
+    );
+  }
+})
+```
 ### usage
-
 `mock/index.js`
 ```javascript
 module.exports = {
@@ -22,10 +51,14 @@ module.exports = {
   ignore: url => {}
   routes: {
     "GET:a/b": require("./mock_1"),
-    "GET:a/b/:id": require("./mock_2"),
+    "GET:a/b/:id": (data) =>{
+      return {
+        data: "mock_2",
+        params: data.params,
+      };
+    },
     "GET:b/:id/:code": require("./mock_3"),
     "POST:a/b": require("./mock_4"),
-    "POST:b/c/:id/:code/:region": require("./mock_5"),
     "POST:b/c": {
        a:1
     },
@@ -46,30 +79,25 @@ module.exports = {
 };
 
 ```
-### include
+
+### example
+If http request is `${host}/api/a/b/10`, dynamic-mock-express will return as follow:
 ```javascript
-// express server
-const app = express();
-app.use(
-  mock({
-    mockDir: path.resolve(__dirname, "../mock")
-  })
-);
-
-
-// webpack-dev-server, such as vue-cli or create-react-app
-
-new WebpackDevServer(compiler, {
-  ...
-  setup: (app) => {
-    app.use(
-        mock({
-          mockDir: path.resolve(__dirname, "../mock"),
-        })
-    );
-  }
-})
+{
+   data: "mock_2",
+   params: {
+     id: "10"
+   }
+}
 ```
 
-### api
+
+### config params
+|paramsName|means|type|default|
+|-|-|-|-|
+|needMock|allow mock|Boolean|true|
+|prefix|prefix of request url|String|""|
+|ignore|filter some request|Function(url)[return a boolean]|() => {return false}|
+|tip|open warn when not match url |Boolean|true||
+
 
