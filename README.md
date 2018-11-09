@@ -28,7 +28,6 @@ app.use(
 #### webpack-dev-server, such as vue-cli or create-react-app
 ```javascript
 const mock = require("dynamic-mock-express");
-const mock = require("dynamic-mock-express");
 new WebpackDevServer(compiler, {
   ...
   setup: (app) => {
@@ -48,10 +47,10 @@ module.exports = {
   needMock: true,
   prefix: "api",
   tip: true,
-  ignore: url => {}
+  ignore: url => {// could filter some request url by return true}
   routes: {
     "GET:a/b": require("./mock_1"),
-    "GET:a/b/:id": (data) =>{
+    "GET:a/b/:id": (data) =>{ // suport return a dynamic json
       return {
         data: "mock_2",
         params: data.params,
@@ -59,7 +58,7 @@ module.exports = {
     },
     "GET:b/:id/:code": require("./mock_3"),
     "POST:a/b": require("./mock_4"),
-    "POST:b/c": {
+    "POST:b/c": {      // suport return a json directly
        a:1
     },
     "POST:a/b/c": data => {
@@ -81,7 +80,7 @@ module.exports = {
 ```
 
 ### example
-If http request is `${host}/api/a/b/10`, dynamic-mock-express will return as follow:
+>If http request is `${host}/api/a/b/10`, dynamic -mock-express returns the following results based on the above configuration
 ```javascript
 {
    data: "mock_2",
@@ -97,7 +96,7 @@ If http request is `${host}/api/a/b/10`, dynamic-mock-express will return as fol
 |-|-|-|-|
 |needMock|allow mock|Boolean|true|
 |prefix|prefix of request url|String|""|
-|ignore|filter some request|Function(url)[return a boolean]|() => {return false}|
-|tip|open warn when not match url |Boolean|true||
+|ignore|filter some request|Function[return a boolean]|(url) => {return false}|
+|tip|open warn when not match url |Boolean|true|
 
 

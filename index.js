@@ -39,7 +39,8 @@ module.exports = function (config) {
         if (!routes[restPath]) {
             if (!isMatch(restPath, Object.keys(routes))) {
                 if (tip) {
-                    console.log("Warn: 没有对" + method + "请求 " + apiPath + " 建立mock文件或配置路径错误\n");
+                    console.log("\x1B[33m%s\x1b[0m", "Warn:");
+                    console.log("\x1B[36m%s\x1B[0m", "     没有对" + method + "请求" + apiPath + "建立mock文件或配置路径错误")
                 }
                 next();
                 return;
