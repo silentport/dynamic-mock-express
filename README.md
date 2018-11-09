@@ -12,7 +12,7 @@
 ### include
 
 ```javascript
-npm i dynamic-mock-express -S
+npm i dynamic-mock-express -D
 
 ```
 #### express server
