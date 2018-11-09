@@ -81,7 +81,9 @@ module.exports = {
        a: {
          b: 1,
          c: (data) => {
-           id: data.params.id
+           return {
+             id: data.params.id
+           }
          }
        }
     }
