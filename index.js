@@ -105,6 +105,7 @@ module.exports = function (config) {
                 res.end();
             } catch (err) {
                 console.log(err)
+                next();
             }
         });
 
