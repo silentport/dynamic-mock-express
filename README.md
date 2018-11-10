@@ -150,7 +150,7 @@ module.exports = {
 // pseudocode
 get("api/a/b/10").then(res => {
   console.log(res) // {id: 10, name: "zhangsan"}
-  put("api/a/b")
+  post("api/a/b")
      .send({id: 10, name: "wangwu"})
      .then(res => {
         get("api/a/b/10").then(res =>{
