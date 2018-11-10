@@ -7,8 +7,9 @@
 >1.Suport Restful API friendly               
 >2.Flexible configuration to support custom filtering URL                   
 >3.Could accept pathParams, query, body in different request methods.          
->4.No cache, config‘s change does not need to be restarted                     
->5.Support function nesting.               
+>4.No cache, config‘s change does not need to be restarted                 
+>5.Suport dynamic, responsive result                                    
+>6.Support function nesting.               
 
 ### include
 
@@ -103,13 +104,71 @@ module.exports = {
 }
 ```
 
+### responsive result
+
+`mock/index.js`
+```javascript
+module.exports = {
+  needMock: true,
+  prefix: "api",
+  storePath: Path.reslove(__dirname, "store"), //must a absolute path
+  tip: true,
+  routes: {
+    "GET:a/b/:id": ({store, params}) => {
+       return store.data.find(item => {return item.id == params.id});
+    }
+    "POST:a/b/": ({store, body}) => {
+       store.data.find(item => {
+          return item.id == body.id
+       }).name = body.name;
+       return {
+          status: true
+       };
+    }
+  }
+}
+```
+`mock/store.js`
+```javascript
+module.exports = {
+    data: [
+      {
+	id: 10,
+        name: "zhangsan"  
+      },
+      {
+	id: 11,
+        name: "lisi"  
+      }
+    ]
+}
+
+```
+
+#### example
+```javascript
+// pseudocode
+get("api/a/b/10").then(res => {
+  console.log(res) // {id: 10, name: "zhangsan"}
+  put("api/a/b")
+     .send({id: 10, name: "wangwu"})
+     .then(res => {
+        get("api/a/b/10").then(res =>{
+          console.log(res) // {id: 10, name: "wangwu"}
+        })
+     })
+})
+
+```
 
 ### config params
 |paramsName|means|type|default|
 |-|-|-|-|
 |needMock|allow mock|Boolean|true|
+|storePath|store path|String|""|
 |prefix|prefix of request url|String|""|
 |ignore|filter some request|Function[return a boolean]|(url) => {return false}|
 |tip|open warn when not match url |Boolean|true|
+
 
 
