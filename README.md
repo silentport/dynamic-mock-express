@@ -116,8 +116,8 @@ module.exports = {
   routes: {
     "GET:a/b/:id": ({store, params}) => {
        return store.data.find(item => {return item.id == params.id});
-    }
-    "POST:a/b/": ({store, body}) => {
+    },
+    "POST:a/b": ({store, body}) => {
        store.data.find(item => {
           return item.id == body.id
        }).name = body.name;

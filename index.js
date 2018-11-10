@@ -105,7 +105,13 @@ module.exports = function (config) {
                 }
         
                 // 深度遍历value，存在值为函数的key则将函数替换为函数的执行结果
-                resData = travel(resData, args);
+                resData = travel(resData, args)
+
+                if (!isArray(resData) && !isObject(resData)) {
+                    console.error("返回数据格式不正确");
+                    next();
+                    return;
+                }
 
                 res.writeHead(200, {"Content-Type": "application/json; charset=UTF-8"});
                 res.write(JSON.stringify(resData));
