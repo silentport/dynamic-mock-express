@@ -1,6 +1,8 @@
+const path = require("path");
 module.exports = {
   needMock: true,
   prefix: "api",
+  storePath: path.resolve(__dirname, "store"),
   tip: true,
   ignore: url => {},
   routes: {
@@ -12,6 +14,13 @@ module.exports = {
         query: data.query,
         body: data.body
       };
+    },
+    "GET:a/b/d": ({store}) =>{
+      return store
+    },
+    "GET:a/b/c": ({store}) =>{
+      store.a ++;
+      return store
     },
     "GET:b/:id/:code": require("./mock_3"),
     "POST:a/b": require("./mock_4"),
