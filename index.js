@@ -99,6 +99,13 @@ module.exports = function (config) {
                 args = ({query: query, params: params, body: data, store: store});
 
                 if (typeof value === "function") {
+                    var argArray = getFuncParams(value);
+                    if (isArray(argArray) && argArray.includes('res')) {
+                        req.params = params;
+                        req.body = req.body;
+                        value(req, res, next);
+                        return ;
+                    }
                     resData = value(args);
                 } else {
                     resData = value || {};
@@ -121,7 +128,12 @@ module.exports = function (config) {
                 next();
             }
         });
-
+        function getFuncParams(func) {
+            var temp = func.toString().match(/\([\s\S]*?\)/);
+            if (temp && isArray(temp)) {
+                return temp[0].match(/\w+/g);
+            }
+        }
         function getType(any) {
             return Object.prototype.toString.call(any);
         }

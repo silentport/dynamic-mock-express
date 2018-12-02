@@ -61,6 +61,17 @@ describe("allow mock", function() {
     });
   });
 
+  describe("GET:a/c", function() {
+    it("should execute auto response as response", function(done) {
+      request(app)
+        .get("/api/a/c")
+        .expect(200, {
+          u: 90,
+        }, done);
+    });
+  });
+
+
   describe("POST:a/b", function() {
     it("should execute mock_4 as response", function(done) {
       request(app)
