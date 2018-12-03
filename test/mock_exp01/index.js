@@ -23,6 +23,11 @@ module.exports = {
       return store
     },
     "GET:b/:id/:code": require("./mock_3"),
+    "GET:a/c": (req, res, next) => {
+      res.writeHead(200, {"Content-Type": "application/json; charset=UTF-8"});
+      res.write(JSON.stringify({u: 90}));
+      res.end();
+    },
     "POST:a/b": require("./mock_4"),
     "POST:b/c/:id/:code/:region": require("./mock_5"),
     "POST:b/c": require("./mock_6"),

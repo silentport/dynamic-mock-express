@@ -1,15 +1,18 @@
 # dynamic-mock-express
+
 ### A middleWare based on express to handle http request when real server is unfinished
+
 [![Coveralls](https://img.shields.io/coveralls/xcatliu/pagic.svg)](https://coveralls.io/github/xcatliu/pagic)
 
 ### feature
 
->1.Suport Restful API friendly               
->2.Flexible configuration to support custom filtering URL                   
->3.Could accept pathParams, query, body in different request methods.          
->4.No cache, config‘s change does not need to be restarted                 
->5.Suport dynamic, responsive result                                    
->6.Support function nesting.               
+> 1.Suport Restful API friendly  
+> 2.Flexible configuration to support custom filtering URL  
+> 3.Could accept pathParams, query, body in different request methods.  
+> 4.No cache, config‘s change does not need to be restarted  
+> 5.Suport dynamic, responsive result  
+> 6.Support function nesting.  
+> 7.Support custom response.
 
 ### include
 
@@ -17,17 +20,21 @@
 npm i dynamic-mock-express -D
 
 ```
+
 #### express server
+
 ```javascript
 const app = express();
-const mock = require("dynamic-mock-express");
+const mock = require('dynamic-mock-express');
 app.use(
   mock({
-    mockDir: path.resolve(__dirname, "../mock")
+    mockDir: path.resolve(__dirname, '../mock'),
   })
 );
 ```
+
 #### webpack-dev-server, such as vue-cli or create-react-app
+
 ```javascript
 const mock = require("dynamic-mock-express");
 new WebpackDevServer(compiler, {
@@ -42,59 +49,72 @@ new WebpackDevServer(compiler, {
   }
 })
 ```
+
 ### usage
+
 `mock/index.js`
+
 ```javascript
 module.exports = {
   needMock: true,
-  prefix: "api",
+  prefix: 'api',
   tip: true,
-  ignore: url => {// could filter some request url by return true
-  
-  }
+  ignore: url => {
+    // could filter some request url by return true
+  },
   routes: {
-    "GET:a/b": require("./mock_1"),
-    "GET:a/b/:id": (data) => { // suport return a dynamic json
+    'GET:a/b': require('./mock_1'),
+    'GET:a/b/:id': data => {
+      // suport return a dynamic json
       return {
-        data: "mock_2",
+        data: 'mock_2',
         params: data.params,
       };
     },
-    "GET:b/:id/:code": require("./mock_3"),
-    "POST:a/b": require("./mock_4"),
-    "POST:b/c": {      // suport return a json directly
-       a:1
+    'GET:b/:id/:code': require('./mock_3'),
+    'POST:a/b': require('./mock_4'),
+    'POST:b/c': {
+      // suport return a json directly
+      a: 1,
     },
-    "POST:a/b/c": data => {
+    'POST:a/c': (req, res, next) => {
+      //support custom response when res as arguement.
+      res.writeHead(200, {'Content-Type': 'application/json; charset=UTF-8'});
+      res.write(JSON.stringify({name: 'lyl'}));
+      res.end();
+    },
+    'POST:a/b/c': data => {
       return {
         status: true,
         params: data.params,
         query: data.query,
-        body: data.body
+        body: data.body,
       };
     },
-    "DELETE:a/b/:id": (data) => {
+    'DELETE:a/b/:id': data => {
       return {
-        id: data.params.id
+        id: data.params.id,
       };
     },
-    "DELETE:a/b/c/:id":  { // support function nesting.
-       a: {
-         b: 1,
-         c: (data) => {
-           return {
-             id: data.params.id
-           }
-         }
-       }
-    }
-  }
+    'DELETE:a/b/c/:id': {
+      // support function nesting.
+      a: {
+        b: 1,
+        c: data => {
+          return {
+            id: data.params.id,
+          };
+        },
+      },
+    },
+  },
 };
-
 ```
 
 ### example
->If http request is `${host}/api/a/b/10`, dynamic -mock-express returns the following results based on the above configuration
+
+> If http request is `${host}/api/a/b/10`, dynamic -mock-express returns the following results based on the above configuration
+
 ```javascript
 {
    data: "mock_2",
@@ -107,68 +127,70 @@ module.exports = {
 ### responsive result
 
 `mock/index.js`
+
 ```javascript
 module.exports = {
   needMock: true,
-  prefix: "api",
-  storePath: Path.reslove(__dirname, "store"), //must a absolute path
+  prefix: 'api',
+  storePath: Path.reslove(__dirname, 'store'), //must a absolute path
   tip: true,
   routes: {
-    "GET:a/b/:id": ({store, params}) => {
-       return store.data.find(item => {return item.id == params.id});
+    'GET:a/b/:id': ({store, params}) => {
+      return store.data.find(item => {
+        return item.id == params.id;
+      });
     },
-    "POST:a/b": ({store, body}) => {
-       store.data.find(item => {
-          return item.id == body.id
-       }).name = body.name;
-       return {
-          status: true
-       };
-    }
-  }
-}
+    'POST:a/b': ({store, body}) => {
+      store.data.find(item => {
+        return item.id == body.id;
+      }).name = body.name;
+      return {
+        status: true,
+      };
+    },
+  },
+};
 ```
+
 `mock/store.js`
+
 ```javascript
 module.exports = {
-    data: [
-      {
-	id: 10,
-        name: "zhangsan"  
-      },
-      {
-	id: 11,
-        name: "lisi"  
-      }
-    ]
-}
-
+  data: [
+    {
+      id: 10,
+      name: 'zhangsan',
+    },
+    {
+      id: 11,
+      name: 'lisi',
+    },
+  ],
+};
 ```
 
 #### example
+
 ```javascript
 // pseudocode
-get("api/a/b/10").then(res => {
-  console.log(res) // {id: 10, name: "zhangsan"}
-  post("api/a/b")
-     .send({id: 10, name: "wangwu"})
-     .then(res => {
-        get("api/a/b/10").then(res =>{
-          console.log(res) // {id: 10, name: "wangwu"}
-        })
-     })
-})
-
+get('api/a/b/10').then(res => {
+  console.log(res); // {id: 10, name: "zhangsan"}
+  post('api/a/b')
+    .send({id: 10, name: 'wangwu'})
+    .then(res => {
+      get('api/a/b/10').then(res => {
+        console.log(res); // {id: 10, name: "wangwu"}
+      });
+    });
+});
 ```
 
 ### config params
-|paramsName|means|type|default|
-|-|-|-|-|
-|needMock|allow mock|Boolean|true|
-|storePath|store path|String|""|
-|prefix|prefix of request url|String|""|
-|ignore|filter some request|Function[return a boolean]|(url) => {return false}|
-|tip|open warn when not match url |Boolean|true|
 
-
-
+| paramsName | means                        | type                       | default                 |
+| ---------- | ---------------------------- | -------------------------- | ----------------------- |
+| needMock   | allow mock                   | Boolean                    | true                    |
+| storePath  | store path                   | String                     | ""                      |
+| prefix     | prefix of request url        | String                     | ""                      |
+| ignore     | filter some request          | Function[return a boolean] | (url) => {return false} |
+| tip        | open warn when not match url | Boolean                    | true                    |
