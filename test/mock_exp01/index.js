@@ -4,10 +4,11 @@ module.exports = {
   prefix: "api",
   storePath: path.resolve(__dirname, "store"),
   tip: true,
+  delay: 200,
   ignore: url => {},
   routes: {
     "GET:a/b": require("./mock_1"),
-    "GET:a/b/:id": (data) =>{
+    "GET:a/b/:id": (data) => {
       return {
         data: "mock_2",
         params: data.params,
@@ -15,17 +16,25 @@ module.exports = {
         body: data.body
       };
     },
-    "GET:a/b/d": ({store}) =>{
+    "GET:a/b/d": ({
+      store
+    }) => {
       return store
     },
-    "GET:a/b/c": ({store}) =>{
-      store.a ++;
+    "GET:a/b/c": ({
+      store
+    }) => {
+      store.a++;
       return store
     },
     "GET:b/:id/:code": require("./mock_3"),
     "GET:a/c": (req, res, next) => {
-      res.writeHead(200, {"Content-Type": "application/json; charset=UTF-8"});
-      res.write(JSON.stringify({u: 90}));
+      res.writeHead(200, {
+        "Content-Type": "application/json; charset=UTF-8"
+      });
+      res.write(JSON.stringify({
+        u: 90
+      }));
       res.end();
     },
     "POST:a/b": require("./mock_4"),
@@ -39,7 +48,7 @@ module.exports = {
         body: data.body
       };
     },
-    "DELETE:a/b/:id": function(data) {
+    "DELETE:a/b/:id": function (data) {
       return {
         id: data.params.id
       };
@@ -52,7 +61,7 @@ module.exports = {
       c: {
         d: 7,
         e: () => {
-          return 88 ;
+          return 88;
         }
       },
       f: [
@@ -61,12 +70,12 @@ module.exports = {
           return 6;
         },
         {
-            b: 5,
-            c: {
-                d: (data) => {
-                    return data.params.id;
-                }
+          b: 5,
+          c: {
+            d: (data) => {
+              return data.params.id;
             }
+          }
         }
       ]
     }

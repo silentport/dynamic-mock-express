@@ -17,6 +17,7 @@ module.exports = function ({
                 routes = createEmpty(),
                 prefix = "",
                 tip = true,
+                delay = 0,
                 needMock = true
         } = target;
         let query = req.query,
@@ -99,12 +100,12 @@ module.exports = function ({
                         getFormData(buffer) :
                         data;
                 }
-                args = ({
+                args = {
                     query,
                     params,
                     body: data,
                     store
-                });
+                };
                 if (isFunc(value)) {
                     let argArray = getFuncParams(value);
                     // 参数包含res时, 由用户自定义返回数据
@@ -132,7 +133,13 @@ module.exports = function ({
                     "Content-Type": "application/json; charset=UTF-8"
                 });
                 res.write(JSON.stringify(resData));
-                res.end();
+                if (delay !== 0) {
+                    setTimeout(() => {
+                        res.end();
+                    }, delay)
+                } else {
+                    res.end();
+                }
             } catch (err) {
                 console.log(err)
                 next();
