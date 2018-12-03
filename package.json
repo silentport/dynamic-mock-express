@@ -1,6 +1,6 @@
 {
   "name": "dynamic-mock-express",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "A dynamic mock tools to response http request",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,9 @@
     "express": "^4.16.4",
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
-    "query-string": "^6.2.0",
     "supertest": "^3.3.0"
+  },
+  "dependencies": {
+    "query-string": "^6.2.0"
   }
 }

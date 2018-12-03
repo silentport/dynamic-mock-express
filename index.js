@@ -11,6 +11,8 @@ module.exports = function (config) {
             ignore = target.ignore || function () {
                 return false;
             },
+            storePath = target.storePath,
+            store = storePath ? require(storePath) : null,
             routes = target.routes || Object.create(null),
             prefix = target.prefix || "",
             tip = target.hasOwnProperty("tip") ? target.tip : true,
@@ -18,6 +20,7 @@ module.exports = function (config) {
             query = req.query,
             data = Object.create(null),
             params = Object.create(null),
+            args = Object.create(null),
             reg = /:(\w+)/,    
             contentType = req.headers["content-type"] || "text/plain;charset=UTF-8",
             method = req.method.toUpperCase(),
@@ -93,15 +96,22 @@ module.exports = function (config) {
                         ? getFormData(buffer)
                         : data;
                 }
+                args = ({query: query, params: params, body: data, store: store});
 
                 if (typeof value === "function") {
-                    resData = value({query: query, params: params, body: data});
+                    resData = value(args);
                 } else {
                     resData = value || {};
                 }
         
                 // 深度遍历value，存在值为函数的key则将函数替换为函数的执行结果
-                resData = travel(resData, {query: query, params: params, body: data});
+                resData = travel(resData, args)
+
+                if (!isArray(resData) && !isObject(resData)) {
+                    console.error("返回数据格式不正确");
+                    next();
+                    return;
+                }
 
                 res.writeHead(200, {"Content-Type": "application/json; charset=UTF-8"});
                 res.write(JSON.stringify(resData));
@@ -189,6 +199,7 @@ module.exports = function (config) {
         
         function searchCache(moduleName, callback) {
             var mod = require.resolve(moduleName);
+            
             if (mod && ((mod = require.cache[mod]) !== undefined)) {
                 (function traverse(mod) {
                     mod.children.forEach(function (child) {
