@@ -1,7 +1,7 @@
 const express = require("express");
 const request = require("supertest");
 const path = require("path");
-const mock = require(path.resolve(__dirname, "../../src/index"));
+const mock = require(path.resolve(__dirname, "../../lib/index"));
 const app = express();
 
 app.use(

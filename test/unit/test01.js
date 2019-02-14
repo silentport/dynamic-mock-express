@@ -1,7 +1,7 @@
 const express = require("express");
 const request = require("supertest");
 const path = require("path");
-const mock = require(path.resolve(__dirname, "../../src/index"));
+const mock = require(path.resolve(__dirname, "../../lib/index"));
 const app = express();
 
 app.use(
@@ -27,6 +27,38 @@ describe("allow mock", function () {
           },
           body: {}
         }, done);
+    });
+  });
+
+  describe("GET:api/a/b/d", function () {
+    it("should use origin store as response", function (done) {
+      request(app)
+        .get("/api/a/b/d")
+        .expect(200, {
+          a: 100
+        }, done);
+    });
+  });
+
+  describe("GET:api/a/b/c", function () {
+    it("should use changed store as response", function (done1) {
+      request(app)
+        .get("/api/a/b/c")
+        .expect(200, {
+          a: 101
+        }, () => {
+          done1();
+          describe("GET:api/a/b/d", function () {
+            it("should use changed store as response", function (done2) {
+              request(app)
+                .get("/api/a/b/d")
+                .expect(200, {
+                  a: 101
+                }, done2);
+            });
+          });
+
+        });
     });
   });
 
