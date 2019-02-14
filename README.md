@@ -1,6 +1,7 @@
 # dynamic-mock-express
 ### A middleWare based on express to handle http request when real server is unfinished
-[![Coveralls](https://img.shields.io/coveralls/xcatliu/pagic.svg)](https://coveralls.io/github/xcatliu/pagic)
+
+[![Coverage Status](https://coveralls.io/repos/github/silentport/dynamic-mock-express/badge.svg?branch=master)](https://coveralls.io/github/silentport/dynamic-mock-express?branch=master)
 
 ### feature
 
