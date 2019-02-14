@@ -1,2 +1,3 @@
-after_success:
-    - './node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls'
+script:
+    - npm run cover
+after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
