@@ -14,6 +14,8 @@ app.listen(3001, function () {
   console.log("Example app listening on port 3001!");
 });
 
+let test_pass = 0;
+
 describe("allow mock", function () {
   describe("GET:api/a/b", function () {
     it("should execute mock_1 as response", function (done) {
@@ -26,7 +28,10 @@ describe("allow mock", function () {
             q: "liyonglong"
           },
           body: {}
-        }, done);
+        }, () => {
+          test_pass ++;
+          done();
+        });
     });
   });
 
@@ -36,7 +41,10 @@ describe("allow mock", function () {
         .get("/api/a/b/d")
         .expect(200, {
           a: 100
-        }, done);
+        }, () => {
+          test_pass ++;
+          done();
+        });
     });
   });
 
@@ -47,6 +55,7 @@ describe("allow mock", function () {
         .expect(200, {
           a: 101
         }, () => {
+          test_pass ++;
           done1();
           describe("GET:api/a/b/d", function () {
             it("should use changed store as response", function (done2) {
@@ -54,7 +63,10 @@ describe("allow mock", function () {
                 .get("/api/a/b/d")
                 .expect(200, {
                   a: 101
-                }, done2);
+                }, () => {
+                  test_pass ++;
+                  done2();
+                });
             });
           });
 
@@ -73,7 +85,10 @@ describe("allow mock", function () {
           },
           query: {},
           body: {}
-        }, done);
+        }, () => {
+          test_pass ++;
+          done();
+        });
     });
   });
 
@@ -89,7 +104,10 @@ describe("allow mock", function () {
           },
           query: {},
           body: {}
-        }, done);
+        }, () => {
+          test_pass ++;
+          done();
+        });
     });
   });
 
@@ -99,7 +117,10 @@ describe("allow mock", function () {
         .get("/api/a/c")
         .expect(200, {
           u: 90,
-        }, done);
+        }, () => {
+          test_pass ++;
+          done();
+        });
     });
   });
 
@@ -116,7 +137,10 @@ describe("allow mock", function () {
           body: {
             name: "liyonglong"
           }
-        }, done);
+        }, () => {
+          test_pass ++;
+          done();
+        });
     });
   });
 
@@ -138,7 +162,10 @@ describe("allow mock", function () {
           body: {
             name: "liyonglong"
           }
-        }, done);
+        }, () => {
+          test_pass ++;
+          done();
+        });
     });
   });
 
@@ -151,7 +178,10 @@ describe("allow mock", function () {
         })
         .expect(200, {
           data: "mock_6"
-        }, done);
+        }, () => {
+          test_pass ++;
+          done();
+        });
     });
   });
 
@@ -169,7 +199,10 @@ describe("allow mock", function () {
           body: {
             name: "liyonglong"
           }
-        }, done);
+        }, () => {
+          test_pass ++;
+          done();
+        });
     });
   });
 
@@ -182,7 +215,10 @@ describe("allow mock", function () {
         })
         .expect(404, {
 
-        }, done);
+        }, () => {
+          test_pass ++;
+          done();
+        });
     });
   });
 
@@ -192,7 +228,10 @@ describe("allow mock", function () {
         .delete("/api/a/b/100")
         .expect(200, {
           id: 100
-        }, done);
+        }, () => {
+          test_pass ++;
+          done();
+        });
     });
   });
 
@@ -217,8 +256,16 @@ describe("allow mock", function () {
               }
             }
           ]
-        }, done);
+        }, () => {
+          test_pass ++;
+          done();
+        });
     });
   });
 
 });
+setInterval(() => {
+  if (test_pass >= 14) {
+    process.exit(0)
+  }
+}, 0)

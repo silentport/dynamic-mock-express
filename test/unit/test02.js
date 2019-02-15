@@ -24,5 +24,4 @@ describe("deny mock", function () {
         }, done);
     });
   });
-
 });

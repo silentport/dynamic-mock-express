@@ -4,7 +4,6 @@ os:
 node_js:
 - 6
 install:
-- npm install -g sails bower cnpm
 - npm i
 script:
 - npm run cover
