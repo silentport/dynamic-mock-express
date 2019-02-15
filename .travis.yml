@@ -1,4 +1,12 @@
+language: node_js
+os:
+- linux
+node_js:
+- 6
+install:
+- npm install -g sails bower cnpm
+- npm i
 script:
-    - npm install
-    - npm run cover
-after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
+- npm run cover
+after_success:
+- npm run coveralls
